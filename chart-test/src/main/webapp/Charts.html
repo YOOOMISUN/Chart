@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"> </script>
+<script>
+	$(document).ready(function(){
+		let x = [];
+		let y = [];
+		$.ajax({
+			url : '/chart-test/Controller/getCountByDept',
+			type : 'get',
+			success : function(json){
+				$(json).each(function(index,item){
+					x.push(item.dname);
+					y.push(item.cnt);
+					let html = '<tr>';
+					html += '<td>' + item.dname + '</td>';
+					html += '<td>'+ item.cnt +'</td>';
+					html += '</tr>';
+					$('#deptCnt').append(html);
+				});
+				
+			
+				let barColors = ["red", "green","blue","orange","brown"];
+
+				new Chart("myChart", {
+				  type: "bar",
+				  data: {
+				    labels: x,
+				    datasets: [{
+				      backgroundColor: barColors,
+				      data: y
+				    }]
+				  },
+				  options: {
+				    legend: {display: false},
+				    title: {
+				      display: true,
+				      text: "Goodee 2022"
+				    }
+				  }
+				});
+				
+				
+			}
+		});
+		let x2 = [];
+		let y2 = [];
+		$.ajax({
+			url : '/chart-test/Controller/getCountByHiredate',
+			type : 'get',
+			data : {year : $('#year').val()},
+			success : function(json){
+				$(json).each(function(index,item){
+					x2.push(item.m);
+					y2.push(item.cnt);
+					let html = '<tr>';
+					html += '<td>' + item.m + '</td>';
+					html += '<td>'+ item.cnt +'</td>';
+					html += '</tr>';
+					$('#hiredateCnt').append(html);
+				});
+				
+			
+				let barColors = ["red", "green","blue","orange","brown"];
+
+				new Chart("myChart1", {
+				  type: "bar",
+				  data: {
+				    labels: x2,
+				    datasets: [{
+				      backgroundColor: barColors,
+				      data: y2
+				    }]
+				  },
+				  options: {
+				    legend: {display: false},
+				    title: {
+				      display: true,
+				      text: "World 2022"
+				    }
+				  }
+				}); 
+				
+			}
+		});
+		
+		
+	});
+</script>
+</head>
+<body>
+	<div>
+		<h2>부서별 인원</h2>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>부서명</th>
+					<th>인원수</th>
+				</tr>
+			</thead>
+			<tbody id="deptCnt">
+			</tbody>
+		</table>
+		<canvas id="myChart" style="width:100%; max-width:700px"></canvas>
+	</div>
+	<div>
+		<h2>월별 입사인원</h2>
+		<select id = "year">
+			<option value="2022">2022</option>
+		</select>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>월</th>
+					<th>인원수</th>
+				</tr>
+			</thead>
+			<tbody id="hiredateCnt">
+			</tbody>
+		</table>
+		<canvas id="myChart1" style="width:100%; max-width:700px"></canvas>
+		<canvas id="myChart1" style="width:100%; max-width:700px"></canvas>
+	</div>
+</body>
+</html>
